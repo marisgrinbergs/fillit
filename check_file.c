@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 18:59:06 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/01/07 19:02:20 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/01/08 14:59:59 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,15 @@ int		ft_check_nb_diez(char *str)
 	n = 1;
 	while (str[i] && (str[i] == '.' || str[i] == '\n' || str[i] == '#'))
 	{
-		if (str[i] && (str[i] == '.' || str[i] == '\n'))
-			i++;
-		if (str[i++] == '#')
+		if (str[i] == '#')
 			c++;
-		if (str[i] == '\n' && str[i - 1] == '\n')
+		if (str[i] == '\n' && str[i + 1] == '\n')
 		{
 			if (c != n * 4)
 				return (0);
 			n++;
 		}
+		i++;
 	}
 	if (c == n * 4)
 		return (1);
@@ -145,12 +144,12 @@ int		main(void)
 	int fd;
 
 	str = (char*)malloc(sizeof(char) * 547);
-	fd = open("tests/valid_12", O_RDONLY);
+	fd = open("tests/error_12", O_RDONLY);
 	bzero(str, 547);
 	read(fd, str, 546);
 	// printf("Resultat du Check_line RETURN :<%d>", ft_check_line(str));
 	// printf("Resultat du Check_nb_carac RETURN :<%d>", ft_check_nb_carac(str));
-	// printf("Resultat du Check_tetriminos RETURN :<%d>", ft_check_tetriminos(str));
-	printf("Resultat du Check_piece RETURN :<%d>", ft_check_piece(str));
+	printf("Resultat du Check_tetriminos RETURN :<%d>", ft_check_nb_diez(str));
+	// printf("Resultat du Check_piece RETURN :<%d>", ft_check_piece(str));
 	return (0);
 }
