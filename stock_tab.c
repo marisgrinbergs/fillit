@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 17:43:22 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/01/14 18:58:18 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/01/15 19:21:45 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,58 +78,20 @@ char		**stock_tab(char *str)
 	return (tab);
 }
 
-// char		**reduce_tab(char **tab)
-// {
-// 	int i;
-// 	int j;
-// 	int o;
-// 	int k;
-// 	char str[10];
-
-// 	o = 0;
-// 	while (tab[o])
-// 	{
-// 		j = 0;
-// 		i = 0;
-// 		k = 0;
-// 		while (tab[o][i])
-// 		{
-// 			if (tab[o][i] == '#' || tab[o][i] == '\n')
-// 			{
-// 				str[j] = tab[o][i];
-// 				j++;
-// 			}
-// 			i++;
-// 		}
-// 		str[j] = '\0';
-// 		ft_bzero(tab[o], 21);
-// 		while (str[k])
-// 		{
-// 			tab[o][k] = str[k];
-// 			k++;
-// 		}
-// 		o++;
-// 	}
-// 	return (tab);
-// }
-
 int			count_pts(char *str)
 {
 	int i;
-	int n;
-	int j;
 
-	n = 0;
 	i = 0;
-	while(str[i])
+	while (str[i])
 		i++;
+	// printf("%d\n", i);
 	while (str[i] != '#')
-	{
-		if (str[i] == '.')
-			n++;
 		i--;
-	}
-	return (n);
+	while (str[i] != '\n')
+		i++;
+	// printf("%d\n", i);
+	return (i);
 }
 
 char		**reduce_tab(char **tab)
@@ -137,7 +99,6 @@ char		**reduce_tab(char **tab)
 	int i;
 	int j;
 	int o;
-	int k;
 	int l;
 	char str[21];
 
@@ -149,8 +110,7 @@ char		**reduce_tab(char **tab)
 		{
 			i = 0;
 			j = 0;
-			k = 0;
-			while ((l == 0 || l == 5 || l == 10 || l == 15) &&
+			while ((i == 0 || i == 5 || i == 10 || i == 15) &&
 			(tab[o][l] == '.' && tab[o][l + 1] == '.' &&
 			tab[o][l + 2] == '.' && tab[o][l + 3] == '.'))
 			{
@@ -159,15 +119,15 @@ char		**reduce_tab(char **tab)
 				l++;
 				i = l;
 			}
-			while (tab[o][i])
+			while (tab[o][i] && i <= ft_strlen(tab[o])
+			- (ft_strlen(tab[o]) - count_pts(tab[o])))
 				str[j++] = tab[o][i++];
 			str[j] = '\0';
 			ft_bzero(tab[o], 21);
-			while (str[k])
-			{
-				tab[o][k] = str[k];
-				k++;
-			}
+			j = 0;
+			i = 0;
+			while (str[j])
+				tab[o][i++] = str[j++];
 			l++;
 		}
 		o++;
