@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 17:39:23 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/01/22 19:25:12 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/01/23 14:42:10 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,93 @@ char	**tranform_colonne(char **tab)
 				tab[o][i + 15] = '?';
 			}
 			i++;
+		}
+		o++;
+	}
+	return (tab);
+}
+int		count_pts(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	while (str[i] != '#')
+		i--;
+	while (str[i] != '\n')
+		i++;
+	return (i);
+}
+
+char		**swap_line(char **tab, int i, int j, int o)
+{
+	char str[20];
+
+	while (tab[o][i] && i <= ft_strlen(tab[o])
+	- (ft_strlen(tab[o]) - count_pts(tab[o])))
+		str[j++] = tab[o][i++];
+	str[j] = '\0';
+	ft_bzero(tab[o], 21);
+	j = 0;
+	i = 0;
+	while (str[j])
+		tab[o][i++] = str[j++];
+	return (tab);
+}
+
+// void		check_dots(char **tab, int i, int j, int o)
+// {
+// 	int l;
+
+// 	l = 0;
+// 	while ((i == 0 || i == 5) &&
+// 	((tab[o][l] == '.' || tab[o][l] == '?') && (tab[o][l + 1] == '.' || tab[o][l + 1] == '?') &&
+// 	(tab[o][l + 2] == '.' || tab[o][l + 2] == '?') && (tab[o][l + 3] == '.' || tab[o][l + 3] == '?')))
+// 	{
+// 		while (tab[o][l] != '\n')
+// 			l++;
+// 		l++;
+// 		i = l;
+// 	}
+// 	tab = swap_line(tab, i, j, o);
+// }
+
+void		check_dots(char **tab, int i, int j, int o)
+{
+	int l;
+
+	l = 0;
+	while ((i == 0 || i == 5) &&
+	(tab[o][l] == '?' && tab[o][l + 1] == '?' &&
+	tab[o][l + 2] == '?' && tab[o][l + 3] == '?'))
+	{
+		while (tab[o][l] != '\n')
+			l++;
+		l++;
+		i = l;
+	}
+	tab = swap_line(tab, i, j, o);
+}
+
+char		**del_empty_line(char **tab)
+{
+	int		i;
+	int		j;
+	int		o;
+	int		l;
+	char	str[21];
+
+	o = 0;
+	while (tab[o])
+	{
+		l = 0;
+		while (tab[o][l])
+		{
+			i = 0;
+			j = 0;
+			check_dots(tab, i, j, o);
+			l++;
 		}
 		o++;
 	}
@@ -172,10 +259,10 @@ int		main(void)
 	bzero(str, 547);
 	read(fd, str, 546);
 	tab = stock_tab(str);
-	int i  = 0;
-	tab = tranform_line(tab);
-	tab = tranform_colonne(tab);
-	tab = get_the_fuckin_piece(tab);
+	tranform_line(tab);
+	tranform_colonne(tab);
+	del_empty_line(tab);
+	get_the_fuckin_piece(tab);
 	ft_print_words_tables(tab);
 	return (0);
 }
