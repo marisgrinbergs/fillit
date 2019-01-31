@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 17:39:23 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/01/23 14:42:10 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/01/30 18:32:59 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ char	**tranform_colonne(char **tab)
 	}
 	return (tab);
 }
-int		count_pts(char *str)
+
+int		ignore_empty_lines(char *str)
 {
 	int i;
 
@@ -86,7 +87,7 @@ char		**swap_line(char **tab, int i, int j, int o)
 	char str[20];
 
 	while (tab[o][i] && i <= ft_strlen(tab[o])
-	- (ft_strlen(tab[o]) - count_pts(tab[o])))
+	- (ft_strlen(tab[o]) - ignore_empty_lines(tab[o])))
 		str[j++] = tab[o][i++];
 	str[j] = '\0';
 	ft_bzero(tab[o], 21);
@@ -96,23 +97,6 @@ char		**swap_line(char **tab, int i, int j, int o)
 		tab[o][i++] = str[j++];
 	return (tab);
 }
-
-// void		check_dots(char **tab, int i, int j, int o)
-// {
-// 	int l;
-
-// 	l = 0;
-// 	while ((i == 0 || i == 5) &&
-// 	((tab[o][l] == '.' || tab[o][l] == '?') && (tab[o][l + 1] == '.' || tab[o][l + 1] == '?') &&
-// 	(tab[o][l + 2] == '.' || tab[o][l + 2] == '?') && (tab[o][l + 3] == '.' || tab[o][l + 3] == '?')))
-// 	{
-// 		while (tab[o][l] != '\n')
-// 			l++;
-// 		l++;
-// 		i = l;
-// 	}
-// 	tab = swap_line(tab, i, j, o);
-// }
 
 void		check_dots(char **tab, int i, int j, int o)
 {
@@ -167,7 +151,8 @@ char	**get_the_fuckin_piece(char **tab)
 	{
 		i = 0;
 		j = 0;
-		while (tab[o][i])
+		while (tab[o][i] && i < ft_strlen(tab[o])
+	- (ft_strlen(tab[o]) - ignore_empty_lines(tab[o])))
 		{
 			if (tab[o][i] != '?')
 				str[j++] = tab[o][i];
@@ -247,6 +232,47 @@ void	ft_print_words_tables(char **tab)
 	}
 }
 
+int		nb_pieces(char **tab)
+{
+	int o;
+
+	o = 0;
+
+	while (tab[o])
+		o++;
+	return (o);
+}
+
+char	*create_map(char **tab)
+{
+	int		i;
+	int		o;
+	int		j;
+	int		a;
+	char	*map;
+
+	a = 1;
+	i = 0;
+	j = 0;
+	// o = ft_sqrt(nb_pieces(tab) * 4);
+	o = 6;
+	map = (char *)malloc(sizeof(char) * (o * o + o + 1));
+	while (i < o * o + o)
+	{
+		map[i] = '.';
+		if (i == (o) * a + j)
+		{
+			map[i] = '\n';
+			a++;
+			if (a > 1)
+				j++;
+		}
+		i++;
+	}
+	map[i] = '\0';
+	return (map);
+}
+
 int		main(void)
 {
 	char *str;
@@ -264,5 +290,6 @@ int		main(void)
 	del_empty_line(tab);
 	get_the_fuckin_piece(tab);
 	ft_print_words_tables(tab);
+	ft_putstr(create_map(tab));
 	return (0);
 }
