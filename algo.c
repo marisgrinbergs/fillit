@@ -6,9 +6,11 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/25 15:31:37 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/01/30 19:33:40 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/01/31 23:05:21 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdlib.h>
 
 char	**algogo(char **tab, char *map)
 {
@@ -36,16 +38,23 @@ char	**algogo(char **tab, char *map)
 					map[j] = tab[o][i];
 					j++;
 					i++;
-					if (map[j] != '.')
+					if (map[j] == '#')
 					{
 						i = 0;
-						exit;
+						map[j - 1] = '.';
+						break;
 					}
+					else if (map[j] == '\n')
+						{
+							j++;
+							map[j - 1] = '.';
+							break;
+						}
 				}
-			if (tab[o][i] == '\n')
+			if (tab[o][i++] == '\n')
 			{
-				i++;
-				j = start + length;
+				if (map[j] == '\n')
+					j++;
 				while ()
 			}
 			while (map[j] == '#' || map[j] == '\n')
