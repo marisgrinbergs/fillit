@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 17:39:23 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/01/30 18:32:59 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/02/01 16:47:53 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,68 @@ char	*create_map(char **tab)
 	return (map);
 }
 
+char	*algogo(char **tab, char *map)
+{
+	int i;
+	int o;
+	int j;
+	int length;
+	int start;
+	int save;
+	char *str;
+	printf("sfsfsf");
+
+	o = 0;
+	length = 0;
+	j = 0;
+	i = 0;
+	while (map[length] != '\n')
+		length++;
+	length++;
+	while (tab[o])
+	{
+		i = 0;
+		start = j;
+		while (map[j])
+		{
+			while (map[j] == '.' && tab[o][i] != '\n')
+			{
+				map[j] = tab[o][i];
+				j++;
+				i++;
+				if (map[j] == '#')
+				{
+					i = 0;
+					map[j - 1] = '.';
+					break ;
+				}
+				else if (map[j] == '\n')
+				{
+					map[j - 1] = '.';
+					j++;
+					break ;
+				}
+			}
+			while (tab[o][i] && tab[o][i++] == '\n')
+			{
+				if (map[j] == '\n')
+					j++;
+				while (tab[o][i] && tab[o][i] != '\n')
+				{
+					save = start + length;
+					map[save++] = tab[o][i++];
+					if (map[save] == '\n')
+						save++;
+				}
+			}
+			while (map[j] == '#' || map[j] == '\n')
+				j++;
+		}
+		o++;
+	}
+	return (map);
+}
+
 int		main(void)
 {
 	char *str;
@@ -281,7 +343,9 @@ int		main(void)
 
 	str = (char*)malloc(sizeof(char) * 547);
 	fd = open("test.txt", O_RDONLY);
+	char	*map;
 
+	map = create_map(tab);
 	bzero(str, 547);
 	read(fd, str, 546);
 	tab = stock_tab(str);
@@ -289,7 +353,8 @@ int		main(void)
 	tranform_colonne(tab);
 	del_empty_line(tab);
 	get_the_fuckin_piece(tab);
-	ft_print_words_tables(tab);
-	ft_putstr(create_map(tab));
+	map = algogo(tab, map);
+	// ft_print_words_tables(tab);
+	ft_putstr(map);
 	return (0);
 }

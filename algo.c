@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/25 15:31:37 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/01/31 23:05:21 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/02/01 16:11:32 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,30 +34,38 @@ char	**algogo(char **tab, char *map)
 		while (map[j])
 		{
 			while (map[j] == '.' && tab[o][i] != '\n')
+			{
+				map[j] = tab[o][i];
+				j++;
+				i++;
+				if (map[j] == '#')
 				{
-					map[j] = tab[o][i];
-					j++;
-					i++;
-					if (map[j] == '#')
-					{
-						i = 0;
-						map[j - 1] = '.';
-						break;
-					}
-					else if (map[j] == '\n')
-						{
-							j++;
-							map[j - 1] = '.';
-							break;
-						}
+					i = 0;
+					map[j - 1] = '.';
+					break ;
 				}
-			if (tab[o][i++] == '\n')
+				else if (map[j] == '\n')
+				{
+					map[j - 1] = '.';
+					j++;
+					break ;
+				}
+			}
+			while (tab[o][i] && tab[o][i++] == '\n')
 			{
 				if (map[j] == '\n')
 					j++;
-				while ()
+				while (tab[o][i] && tab[o][i] != '\n')
+				{
+					save = start + length;
+					map[save++] = tab[o][i++];
+					if (map[save] == '\n')
+						save++;
+				} 
 			}
 			while (map[j] == '#' || map[j] == '\n')
 				j++;
 		}
+	}
+	return (tab);
 }
