@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 17:39:23 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/02/01 16:47:53 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/02/04 18:38:55 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,64 +273,56 @@ char	*create_map(char **tab)
 	return (map);
 }
 
+int		nextline(char *map, int xmap, int first)
+{
+	int i;
+
+	i = 0;
+	while (map[i] != '\n')
+		i++;
+	while (map[xmap] != '\n')
+		xmap++;
+	while (first < xmap)
+		first = first + i;
+	if (first > i * i)
+		return (-1);
+	return (first);
+}
+
 char	*algogo(char **tab, char *map)
 {
 	int i;
-	int o;
-	int j;
-	int length;
-	int start;
-	int save;
-	char *str;
-	printf("sfsfsf");
+	int xmap;
+	int piece;
+	int	first;
 
-	o = 0;
-	length = 0;
-	j = 0;
+	first = 0;
 	i = 0;
-	while (map[length] != '\n')
-		length++;
-	length++;
-	while (tab[o])
+	xmap = 0;
+	piece = 0;
+	while (map[xmap])
 	{
-		i = 0;
-		start = j;
-		while (map[j])
+		while (tab[piece][i] != '\0')
 		{
-			while (map[j] == '.' && tab[o][i] != '\n')
+			if (map[xmap])
 			{
-				map[j] = tab[o][i];
-				j++;
+				map[xmap++] = tab[piece][i++];
+				if (i == 0)
+					first = xmap;
+			}
+			if (tab[piece][i] == '\n')
+			{
 				i++;
-				if (map[j] == '#')
-				{
-					i = 0;
-					map[j - 1] = '.';
-					break ;
-				}
-				else if (map[j] == '\n')
-				{
-					map[j - 1] = '.';
-					j++;
-					break ;
-				}
+				xmap = nextline(map, xmap, first);
 			}
-			while (tab[o][i] && tab[o][i++] == '\n')
+			if (map[xmap] == '\n')
 			{
-				if (map[j] == '\n')
-					j++;
-				while (tab[o][i] && tab[o][i] != '\n')
-				{
-					save = start + length;
-					map[save++] = tab[o][i++];
-					if (map[save] == '\n')
-						save++;
-				}
+				// xmap = first;
+				xmap = nextline(map, xmap, first);
 			}
-			while (map[j] == '#' || map[j] == '\n')
-				j++;
 		}
-		o++;
+		xmap++;
+
 	}
 	return (map);
 }
