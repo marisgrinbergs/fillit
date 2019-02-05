@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 17:39:23 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/02/04 18:38:55 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/02/04 19:22:44 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,16 +275,16 @@ char	*create_map(char **tab)
 
 int		nextline(char *map, int xmap, int first)
 {
-	int i;
+	int line;
 
-	i = 0;
-	while (map[i] != '\n')
-		i++;
+	line = 0;
+	while (map[line] != '\n')
+		line++;
 	while (map[xmap] != '\n')
 		xmap++;
 	while (first < xmap)
-		first = first + i;
-	if (first > i * i)
+		first = first + line;
+	if (first > line * line)
 		return (-1);
 	return (first);
 }
@@ -317,12 +317,10 @@ char	*algogo(char **tab, char *map)
 			}
 			if (map[xmap] == '\n')
 			{
-				// xmap = first;
 				xmap = nextline(map, xmap, first);
 			}
 		}
 		xmap++;
-
 	}
 	return (map);
 }
