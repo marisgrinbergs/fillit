@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 17:39:23 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/02/04 19:22:44 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/02/06 04:43:12 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,7 @@ char	**get_the_fuckin_piece(char **tab)
 	{
 		i = 0;
 		j = 0;
-		while (tab[o][i] && i < ft_strlen(tab[o])
-	- (ft_strlen(tab[o]) - ignore_empty_lines(tab[o])))
+		while (tab[o][i])
 		{
 			if (tab[o][i] != '?')
 				str[j++] = tab[o][i];
@@ -168,6 +167,7 @@ char	**get_the_fuckin_piece(char **tab)
 	}
 	return (tab);
 }
+
 
 int			count_line(char *str)
 {
@@ -228,6 +228,7 @@ void	ft_print_words_tables(char **tab)
 			j++;
 		}
 		ft_putchar('\n');
+		ft_putchar('\n');
 		i++;
 	}
 }
@@ -273,57 +274,82 @@ char	*create_map(char **tab)
 	return (map);
 }
 
-int		nextline(char *map, int xmap, int first)
+char	**ft_dstrnew(int y, int x)
 {
-	int line;
+	char	**dstr;
+	int		i;
 
-	line = 0;
-	while (map[line] != '\n')
-		line++;
-	while (map[xmap] != '\n')
-		xmap++;
-	while (first < xmap)
-		first = first + line;
-	if (first > line * line)
-		return (-1);
-	return (first);
-}
-
-char	*algogo(char **tab, char *map)
-{
-	int i;
-	int xmap;
-	int piece;
-	int	first;
-
-	first = 0;
 	i = 0;
-	xmap = 0;
-	piece = 0;
-	while (map[xmap])
+	dstr = (char **)malloc(sizeof(char *) * (y + 1));
+	if (!dstr)
+		return (NULL);
+	i = 0;
+	while (i < y)
 	{
-		while (tab[piece][i] != '\0')
-		{
-			if (map[xmap])
-			{
-				map[xmap++] = tab[piece][i++];
-				if (i == 0)
-					first = xmap;
-			}
-			if (tab[piece][i] == '\n')
-			{
-				i++;
-				xmap = nextline(map, xmap, first);
-			}
-			if (map[xmap] == '\n')
-			{
-				xmap = nextline(map, xmap, first);
-			}
-		}
-		xmap++;
+		dstr[i] = ft_strnew(x);
+		i++;
 	}
-	return (map);
+	dstr[i] = 0;
+	return (dstr);
 }
+
+char	**converpiece(char *piece)
+{
+	int i = 0;
+	int y = 0;
+	int x = 0;
+	int p;
+	char **t;
+	int n;
+
+	n = (int)ft_strlen(piece) / 2;
+	t = ft_dstrnew(n, n);
+
+	i = 0;
+	while (t[y])
+	{	
+		while (piece[i])
+		{
+			t[y][x] = piece[i]; 
+			i++;
+			x++;
+		}
+		x = 0;
+		y++;
+	}
+	return (t);
+}
+
+void show_everything(char **tab)
+{
+	char **x;
+
+	for (int i = 0; tab[i]; i++)
+	{
+		x = converpiece(tab[i]);
+		for (int i = 0; x[i]; i++)
+			ft_putstr(x[i]);
+		ft_putchar('\n');
+	}
+}
+
+char	*algogo(char *map, char **tab)
+{
+
+	int i;
+	int j;
+	int o;
+	int x;
+
+	o = 0;
+	j = 0;
+	x = 0;
+
+	
+}
+
+
+
 
 int		main(void)
 {
@@ -343,8 +369,11 @@ int		main(void)
 	tranform_colonne(tab);
 	del_empty_line(tab);
 	get_the_fuckin_piece(tab);
-	map = algogo(tab, map);
-	// ft_print_words_tables(tab);
-	ft_putstr(map);
+	//map = algogo(map, tab);
+
+	show_everything(tab);
+
+	//ft_print_words_tables(tab);
+	//ft_putstr(map);
 	return (0);
 }
