@@ -6,7 +6,7 @@
 /*   By: magrinbe <magrinbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 17:39:23 by magrinbe          #+#    #+#             */
-/*   Updated: 2019/02/06 04:43:12 by magrinbe         ###   ########.fr       */
+/*   Updated: 2019/02/11 18:49:45 by magrinbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,8 @@ char	**get_the_fuckin_piece(char **tab)
 	{
 		i = 0;
 		j = 0;
-		while (tab[o][i])
+		while (tab[o][i] && i < ft_strlen(tab[o])
+	- (ft_strlen(tab[o]) - ignore_empty_lines(tab[o])))
 		{
 			if (tab[o][i] != '?')
 				str[j++] = tab[o][i];
@@ -228,7 +229,6 @@ void	ft_print_words_tables(char **tab)
 			j++;
 		}
 		ft_putchar('\n');
-		ft_putchar('\n');
 		i++;
 	}
 }
@@ -274,68 +274,46 @@ char	*create_map(char **tab)
 	return (map);
 }
 
-char	**ft_dstrnew(int y, int x)
+int		try_pos(char *map, char **tab, int j, int o)
 {
-	char	**dstr;
-	int		i;
+	int i;
+	int start;
+	int len;
 
+	start = j;
+	len = 0;
 	i = 0;
-	dstr = (char **)malloc(sizeof(char *) * (y + 1));
-	if (!dstr)
-		return (NULL);
-	i = 0;
-	while (i < y)
+
+	while (map[len] != '\n')
+		len++;
+	len++;
+	if (map[j] != '.')
+		return (0);
+	while (tab[o][i])
 	{
-		dstr[i] = ft_strnew(x);
-		i++;
-	}
-	dstr[i] = 0;
-	return (dstr);
-}
-
-char	**converpiece(char *piece)
-{
-	int i = 0;
-	int y = 0;
-	int x = 0;
-	int p;
-	char **t;
-	int n;
-
-	n = (int)ft_strlen(piece) / 2;
-	t = ft_dstrnew(n, n);
-
-	i = 0;
-	while (t[y])
-	{	
-		while (piece[i])
+		printf("test");
+		if (tab[o][i] == '\n')
 		{
-			t[y][x] = piece[i]; 
-			i++;
-			x++;
+			printf("test");
+			j = start + len;
+			while (tab[o][i])
+			{
+				if ((map[j] != '.' && tab[o][i]) || (map[j] == '\n' && tab[o][i] != map[j]))
+					return (0);
+				i++;
+				j++;
+			}
 		}
-		x = 0;
-		y++;
+		i++;
+		j++;
+		if ((map[j] != '.' && tab[o][i]) || (map[j] == '\n' && tab[o][i] != map[j]))
+			return (0);
 	}
-	return (t);
-}
-
-void show_everything(char **tab)
-{
-	char **x;
-
-	for (int i = 0; tab[i]; i++)
-	{
-		x = converpiece(tab[i]);
-		for (int i = 0; x[i]; i++)
-			ft_putstr(x[i]);
-		ft_putchar('\n');
-	}
+	return (1);
 }
 
 char	*algogo(char *map, char **tab)
 {
-
 	int i;
 	int j;
 	int o;
@@ -344,22 +322,27 @@ char	*algogo(char *map, char **tab)
 	o = 0;
 	j = 0;
 	x = 0;
-
+	while(tab[o])
+	{
+		i = 0;
+		while (tab[o][i])
+		{
+			
+		}
+	}
 	
 }
-
-
-
 
 int		main(void)
 {
 	char *str;
+	char *map;
 	int fd;
 	char **tab;
 
+
 	str = (char*)malloc(sizeof(char) * 547);
 	fd = open("test.txt", O_RDONLY);
-	char	*map;
 
 	map = create_map(tab);
 	bzero(str, 547);
@@ -369,11 +352,8 @@ int		main(void)
 	tranform_colonne(tab);
 	del_empty_line(tab);
 	get_the_fuckin_piece(tab);
+
 	//map = algogo(map, tab);
-
-	show_everything(tab);
-
-	//ft_print_words_tables(tab);
-	//ft_putstr(map);
+	// ft_print_words_tables(tab);
 	return (0);
 }
